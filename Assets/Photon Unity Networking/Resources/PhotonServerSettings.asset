@@ -29,4 +29,5 @@ MonoBehaviour:
   RunInBackground: 1
   RpcList:
   - UpdateBroadcasterMaterial
+  - SendChatMessage
   DisableAutoOpenWizard: 1

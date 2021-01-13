@@ -28,7 +28,6 @@ public class ProfileSelection : Photon.PunBehaviour
             isBroadcaster = false;
 
             BroadCastSelectionPanel.SetActive(false);
-            //PartyUIContainer.SetActive(false);
 
             agoraScript = GetComponent<AgoraProfile>();
             StartCoroutine(AgoraEngineSetup());
@@ -94,7 +93,6 @@ public class ProfileSelection : Photon.PunBehaviour
             if (isNewStateBroadcaster)
             {
                 agoraEngine.SetClientRole(CLIENT_ROLE_TYPE.CLIENT_ROLE_BROADCASTER);
-                agoraEngine.SetLocalPublishFallbackOption(STREAM_FALLBACK_OPTIONS.STREAM_FALLBACK_OPTION_AUDIO_ONLY);
                 isBroadcaster = true;
 
                 TurnVikingGold();
@@ -102,13 +100,10 @@ public class ProfileSelection : Photon.PunBehaviour
             else
             {
                 agoraEngine.SetClientRole(CLIENT_ROLE_TYPE.CLIENT_ROLE_AUDIENCE);
-                agoraEngine.SetRemoteSubscribeFallbackOption(STREAM_FALLBACK_OPTIONS.STREAM_FALLBACK_OPTION_AUDIO_ONLY);
                 isBroadcaster = false;
             }
 
-            //PartyUIContainer.SetActive(true);
-            BroadCastSelectionPanel.SetActive(false);
-            
+            BroadCastSelectionPanel.SetActive(false);            
             agoraScript.JoinChannel();
         }
     }

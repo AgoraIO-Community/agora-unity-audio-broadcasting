@@ -28,7 +28,5 @@ MonoBehaviour:
   NetworkLogging: 1
   RunInBackground: 1
   RpcList:
-  - SendChatMessage
-  - InvitePlayerToPartyChannel
   - UpdateBroadcasterMaterial
   DisableAutoOpenWizard: 1

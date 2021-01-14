@@ -34,6 +34,8 @@ public class AgoraProfile : Photon.PunBehaviour
             myClientRole = CLIENT_ROLE_TYPE.CLIENT_ROLE_AUDIENCE;
 
             isSmoothingTalkBubble = false;
+
+            SetChatBubbleVisibility();
         }
     }
 
@@ -109,6 +111,7 @@ public class AgoraProfile : Photon.PunBehaviour
                         StartCoroutine(SpeechBubbleSmoothing());
                         isChatBubbleVisible = true;
                         //chatBubble.SetActive(true);
+                        photonView.RPC("NetworkedChatBubbleVisibility", PhotonTargets.All);
                         SetChatBubbleVisibility();
                     }
                 }
@@ -144,8 +147,9 @@ public class AgoraProfile : Photon.PunBehaviour
         }
 
         isChatBubbleVisible = false;
-        SetChatBubbleVisibility();
+        //SetChatBubbleVisibility();
         //chatBubble.SetActive(false);
+        photonView.RPC("DisableSpeechBubble", PhotonTargets.All);
         isSmoothingTalkBubble = false;
     }
 
@@ -155,17 +159,17 @@ public class AgoraProfile : Photon.PunBehaviour
     }
 
     [PunRPC]
+    public void DisableSpeechBubble()
+    {
+        chatBubble.SetActive(false);
+    }
+
+    [PunRPC]
     public void NetworkedChatBubbleVisibility()
     {
         print("my uid: " + myUID);
-        if(isChatBubbleVisible)
-        {
-            chatBubble.SetActive(true);
-        }
-        else
-        {
-            chatBubble.SetActive(false);
-        }
+
+        chatBubble.SetActive(true);
 
         //vikingMesh.material = broadcasterMaterial;
     }

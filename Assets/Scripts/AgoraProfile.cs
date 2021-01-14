@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using agora_gaming_rtc;
 
-public class AgoraProfile : Photon.MonoBehaviour
+public class AgoraProfile : Photon.PunBehaviour
 {
     [Header("Agora Properties")]
     [SerializeField]
@@ -157,6 +157,7 @@ public class AgoraProfile : Photon.MonoBehaviour
     [PunRPC]
     public void NetworkedChatBubbleVisibility()
     {
+        print("my uid: " + myUID);
         if(isChatBubbleVisible)
         {
             chatBubble.SetActive(true);
@@ -169,6 +170,13 @@ public class AgoraProfile : Photon.MonoBehaviour
         //vikingMesh.material = broadcasterMaterial;
     }
 
+    public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
+    {
+        base.OnPhotonPlayerConnected(newPlayer);
+
+        SetChatBubbleVisibility();
+    }
+    
 
     private IEnumerator OnLeftRoom()
     {

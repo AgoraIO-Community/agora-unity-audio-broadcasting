@@ -28,6 +28,8 @@ MonoBehaviour:
   NetworkLogging: 1
   RunInBackground: 1
   RpcList:
-  - UpdateBroadcasterMaterial
+  - ActivateSpeechBubble
+  - DisableSpeechBubble
   - SendChatMessage
+  - UpdateBroadcasterMaterial
   DisableAutoOpenWizard: 1

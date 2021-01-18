@@ -9,7 +9,6 @@ public class AgoraProfile : Photon.PunBehaviour
     [Header("Agora Properties")]
     [SerializeField]
     private string channel;
-    private string originalChannel;
     [SerializeField]
     private uint myUID = 0;
     [SerializeField]
@@ -19,7 +18,12 @@ public class AgoraProfile : Photon.PunBehaviour
     private Text text_ChannelName;
     [SerializeField]
     private GameObject chatBubble;
-    
+
+    private bool isLocalPlayerTalking = false;
+    [SerializeField]
+    private float talkBubbleBuffer = .75f;
+    private bool isSmoothingTalkBubble = false;
+
     void Start()
     {
         if (photonView.isMine)
@@ -107,8 +111,6 @@ public class AgoraProfile : Photon.PunBehaviour
                     {
                         isLocalPlayerTalking = true;
                         StartCoroutine(SpeechBubbleSmoothing());
-                        isChatBubbleVisible = true;
-                        //chatBubble.SetActive(true);
                         photonView.RPC("ActivateSpeechBubble", PhotonTargets.All);
                     }
                 }
@@ -116,11 +118,6 @@ public class AgoraProfile : Photon.PunBehaviour
         }
     }
     #endregion
-
-    private bool isLocalPlayerTalking = false;
-    [SerializeField] private float talkBubbleBuffer = .75f;
-    private bool isSmoothingTalkBubble = false;
-    private bool isChatBubbleVisible = false;
 
     private IEnumerator SpeechBubbleSmoothing()
     {
@@ -142,10 +139,6 @@ public class AgoraProfile : Photon.PunBehaviour
 
             yield return null;
         }
-
-        isChatBubbleVisible = false;
-        //SetChatBubbleVisibility();
-        //chatBubble.SetActive(false);
         photonView.RPC("DisableSpeechBubble", PhotonTargets.All);
         isSmoothingTalkBubble = false;
     }

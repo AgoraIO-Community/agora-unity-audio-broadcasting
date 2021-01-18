@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using agora_gaming_rtc;
@@ -91,19 +90,21 @@ public class AgoraProfile : Photon.PunBehaviour
     {
         myClientRole = newRole;
     }
+    #endregion
 
     private void OnVolumeChangedHandler(AudioVolumeInfo[] speakers, int speakerNumber, int totalVolume)
     {
-        if(speakers != null)
+        // if there is anyone speaking
+        if (speakers != null)
         {
-            int speakerLength = speakers.Length;
-
-            for(int i = 0; i < speakerLength; i++)
+            for (int i = 0; i < speakers.Length; i++)
             {
-                print("speaker: " + i);
-                if(speakers[i].uid == 0)
+                //Debug.Log("speaker: " + i);
+
+                // If speaker uid == 0, that signifies you have the local player
+                if (speakers[i].uid == 0)
                 {
-                    if(speakers[i].vad == 0)
+                    if (speakers[i].vad == 0)
                     {
                         isLocalPlayerTalking = false;
                     }
@@ -117,7 +118,6 @@ public class AgoraProfile : Photon.PunBehaviour
             }
         }
     }
-    #endregion
 
     private IEnumerator SpeechBubbleSmoothing()
     {
@@ -157,10 +157,10 @@ public class AgoraProfile : Photon.PunBehaviour
         chatBubble.SetActive(true);
     }
 
-    public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
-    {
-        base.OnPhotonPlayerConnected(newPlayer);
-    }
+    //public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
+    //{
+    //    base.OnPhotonPlayerConnected(newPlayer);
+    //}
     
 
     private IEnumerator OnLeftRoom()

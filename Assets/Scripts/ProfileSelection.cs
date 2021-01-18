@@ -11,8 +11,6 @@ public class ProfileSelection : Photon.PunBehaviour
     [Header("UI Elements")]
     [SerializeField]
     private GameObject BroadCastSelectionPanel;
-    //[SerializeField]
-    //private GameObject PartyUIContainer;
 
     [Header("Broadcaster")]
     [SerializeField]
@@ -38,7 +36,6 @@ public class ProfileSelection : Photon.PunBehaviour
     {
         if (photonView.isMine)
         {
-            //agoraEngine = AgoraEngine.mRtcEngine;
             float engineTimer = 0f;
             float engineTimeout = 3f;
 

@@ -1,10 +1,10 @@
-﻿#if UNITY_IPHONE
+﻿#if UNITY_IPHONE || UNITY_STANDALONE_OSX
+
 using System.IO;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.iOS.Xcode;
 using UnityEditor.iOS.Xcode.Extensions;
-
 
 public class BL_BuildPostProcess
 {
@@ -15,6 +15,18 @@ public class BL_BuildPostProcess
         if (buildTarget == BuildTarget.iOS)
         {
             LinkLibraries(path);
+            UpdatePermission(path + "/Info.plist");
+        }
+        else if (buildTarget == BuildTarget.StandaloneOSX)
+        {
+            string plistPath = path + "/Contents/Info.plist"; // straight to a binary
+            if (path.EndsWith(".xcodeproj"))
+            {
+                // This must be a build that exports Xcode
+                string dir = Path.GetDirectoryName(path);
+                plistPath = dir + "/" + PlayerSettings.productName + "/Info.plist";
+            }
+            UpdatePermission(plistPath);
         }
     }
 
@@ -48,7 +60,7 @@ public class BL_BuildPostProcess
         "libresolv.tbd",
     };
 
-    public static void LinkLibraries(string path)
+    static void LinkLibraries(string path)
     {
         // linked library
         string projPath = path + "/Unity-iPhone.xcodeproj/project.pbxproj";
@@ -83,15 +95,24 @@ public class BL_BuildPostProcess
 
         // done, write to the project file
         File.WriteAllText(projPath, proj.WriteToString());
+    }
 
-        // permission
-        string pListPath = path + "/Info.plist";
+    /// <summary>
+    ///   Update the permission 
+    /// </summary>
+    /// <param name="pListPath">path to the Info.plist file</param>
+    static void UpdatePermission(string pListPath)
+    {
         PlistDocument plist = new PlistDocument();
         plist.ReadFromString(File.ReadAllText(pListPath));
         PlistElementDict rootDic = plist.root;
+        var cameraPermission = "NSCameraUsageDescription";
         var micPermission = "NSMicrophoneUsageDescription";
+        rootDic.SetString(cameraPermission, "Video need to use camera");
         rootDic.SetString(micPermission, "Voice call need to user mic");
         File.WriteAllText(pListPath, plist.WriteToString());
     }
+
 }
+
 #endif
